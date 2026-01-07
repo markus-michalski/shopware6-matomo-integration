@@ -104,8 +104,8 @@
             <name>useKlaroConsent</name>
             <label>Use Klaro Consent Manager</label>
             <label lang="de-DE">Klaro Consent Manager verwenden</label>
-            <helpText>Enable integration with MmdKlaroConsent plugin. Script will only load after user consent.</helpText>
-            <helpText lang="de-DE">Integration mit dem MmdKlaroConsent Plugin aktivieren. Das Script wird erst nach Benutzer-Einwilligung geladen.</helpText>
+            <helpText>Requires the MmdKlaroConsent plugin to be installed and configured. When enabled, tracking scripts will only load after user consent via Klaro.</helpText>
+            <helpText lang="de-DE">Erfordert das installierte und konfigurierte MmdKlaroConsent Plugin. Bei Aktivierung werden Tracking-Scripts erst nach Benutzer-Einwilligung über Klaro geladen.</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -113,8 +113,8 @@
             <name>klaroServiceName</name>
             <label>Klaro Service Name</label>
             <label lang="de-DE">Klaro Service-Name</label>
-            <helpText>Technical name used in Klaro. Must match the service registered in Klaro admin.</helpText>
-            <helpText lang="de-DE">Technischer Name in Klaro. Muss mit dem in der Klaro-Admin registrierten Service übereinstimmen.</helpText>
+            <helpText>Technical service name for Klaro integration. Must match the service name configured in MmdKlaroConsent plugin settings.</helpText>
+            <helpText lang="de-DE">Technischer Service-Name für die Klaro-Integration. Muss mit dem in den MmdKlaroConsent Plugin-Einstellungen konfigurierten Service-Namen übereinstimmen.</helpText>
             <defaultValue>matomo</defaultValue>
         </input-field>
     </card>
