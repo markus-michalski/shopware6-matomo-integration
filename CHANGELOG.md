@@ -28,3 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - XSS prevention via json_encode with proper flags
 - HTTPS-only URL validation for Matomo server
 - Dangerous character filtering in URLs
+
+[Unreleased]: https://github.com/markus-michalski/shopware6-matomo-integration/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/markus-michalski/shopware6-matomo-integration/releases/tag/v1.0.0
