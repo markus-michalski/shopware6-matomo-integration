@@ -1,5 +1,5 @@
 {
-    "name": "mmd/matomo-analytics",
+    "name": "mmd/sw65-matomo-analytics",
     "description": "Matomo Analytics Integration for Shopware 6 with E-Commerce Tracking and GDPR compliance",
     "version": "1.0.0",
     "type": "shopware-platform-plugin",
