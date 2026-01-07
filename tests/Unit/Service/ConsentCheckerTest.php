@@ -172,6 +172,8 @@ final class ConsentCheckerTest extends TestCase
             ipAnonymizationLevel: 2,
             respectDoNotTrack: $respectDnt,
             requireConsent: $requireConsent,
+            useKlaroConsent: false,
+            klaroServiceName: 'matomo',
             ecommerceEnabled: true,
             trackProductViews: true,
             trackCartUpdates: true,

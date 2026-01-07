@@ -20,6 +20,8 @@ final class MatomoConfig
         private readonly int $ipAnonymizationLevel,
         private readonly bool $respectDoNotTrack,
         private readonly bool $requireConsent,
+        private readonly bool $useKlaroConsent,
+        private readonly string $klaroServiceName,
         private readonly bool $ecommerceEnabled,
         private readonly bool $trackProductViews,
         private readonly bool $trackCartUpdates,
@@ -89,6 +91,22 @@ final class MatomoConfig
     public function requiresConsent(): bool
     {
         return $this->requireConsent;
+    }
+
+    /**
+     * Check if Klaro consent manager integration is enabled
+     */
+    public function usesKlaroConsent(): bool
+    {
+        return $this->useKlaroConsent;
+    }
+
+    /**
+     * Get the Klaro service name for this tracking service
+     */
+    public function getKlaroServiceName(): string
+    {
+        return $this->klaroServiceName;
     }
 
     public function isEcommerceEnabled(): bool

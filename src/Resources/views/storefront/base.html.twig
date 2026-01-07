@@ -4,20 +4,60 @@
 {% block base_body_script %}
     {{ parent() }}
 
-    {# Main Matomo tracking code #}
-    {% if matomoTrackingCode is defined and matomoTrackingCode %}
-        <script>
-            {{ matomoTrackingCode|raw }}
-        </script>
-    {% endif %}
-
-    {# E-Commerce tracking code (product view, cart, order) #}
-    {% if page.extensions.matomoEcommerce is defined %}
-        {% set ecommerce = page.extensions.matomoEcommerce %}
-        {% if ecommerce.trackingCode is defined and ecommerce.trackingCode %}
-            <script>
-                {{ ecommerce.trackingCode|raw }}
+    {% if matomoConfig is defined and matomoConfig.enabled %}
+        {% if matomoConfig.useKlaroConsent %}
+            {# Klaro Consent Mode: Script is blocked until user consents #}
+            {# The data-name attribute tells Klaro which service this script belongs to #}
+            <script type="text/plain"
+                    data-type="text/javascript"
+                    data-name="{{ matomoConfig.klaroServiceName }}">
+                {{ matomoTrackingCode|raw }}
             </script>
+
+            {# E-Commerce tracking (also needs consent) #}
+            {% if page.extensions.matomoEcommerce is defined %}
+                {% set ecommerce = page.extensions.matomoEcommerce %}
+                {% if ecommerce.trackingCode %}
+                    <script type="text/plain"
+                            data-type="text/javascript"
+                            data-name="{{ matomoConfig.klaroServiceName }}">
+                        {{ ecommerce.trackingCode|raw }}
+                    </script>
+                {% endif %}
+            {% endif %}
+
+            {# Klaro consent change handler for dynamic E-Commerce tracking #}
+            <script>
+                (function() {
+                    var serviceName = '{{ matomoConfig.klaroServiceName }}';
+
+                    window.addEventListener('klaro-consent-change', function(e) {
+                        var consents = e.detail.consents || {};
+
+                        if (consents[serviceName] === true && typeof window._paq !== 'undefined') {
+                            // Matomo was just enabled - track page view if not already done
+                            console.log('[Matomo] Consent granted for service: ' + serviceName);
+                        }
+                    });
+                })();
+            </script>
+        {% else %}
+            {# Standard mode: Scripts load immediately #}
+            {% if matomoTrackingCode is defined and matomoTrackingCode %}
+                <script>
+                    {{ matomoTrackingCode|raw }}
+                </script>
+            {% endif %}
+
+            {# E-Commerce tracking code (product view, cart, order) #}
+            {% if page.extensions.matomoEcommerce is defined %}
+                {% set ecommerce = page.extensions.matomoEcommerce %}
+                {% if ecommerce.trackingCode %}
+                    <script>
+                        {{ ecommerce.trackingCode|raw }}
+                    </script>
+                {% endif %}
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

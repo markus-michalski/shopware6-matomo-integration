@@ -205,6 +205,8 @@ final class EcommerceTrackerTest extends TestCase
             ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
+            useKlaroConsent: false,
+            klaroServiceName: 'matomo',
             ecommerceEnabled: $ecommerceEnabled,
             trackProductViews: $trackProductViews,
             trackCartUpdates: $trackCartUpdates,

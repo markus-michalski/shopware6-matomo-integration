@@ -72,6 +72,8 @@ final class MatomoConfigFactoryTest extends TestCase
         self::assertSame(2, $config->getIpAnonymizationLevel());
         self::assertTrue($config->shouldRespectDoNotTrack());
         self::assertFalse($config->requiresConsent());
+        self::assertFalse($config->usesKlaroConsent());
+        self::assertSame('matomo', $config->getKlaroServiceName());
         self::assertTrue($config->isEcommerceEnabled());
     }
 
@@ -136,6 +138,25 @@ final class MatomoConfigFactoryTest extends TestCase
         self::assertSame(5, $config->getSiteId());
     }
 
+    #[Test]
+    public function itHandlesKlaroConsentConfig(): void
+    {
+        $this->systemConfigService
+            ->method('get')
+            ->willReturnCallback(function (string $key) {
+                return match ($key) {
+                    'MmdMatomoAnalytics.config.useKlaroConsent' => true,
+                    'MmdMatomoAnalytics.config.klaroServiceName' => 'matomo-analytics',
+                    default => $this->getDefaultConfigValue($key),
+                };
+            });
+
+        $config = $this->factory->createForSalesChannel(null);
+
+        self::assertTrue($config->usesKlaroConsent());
+        self::assertSame('matomo-analytics', $config->getKlaroServiceName());
+    }
+
     private function getDefaultConfigValue(string $key): mixed
     {
         return match ($key) {
@@ -146,6 +167,8 @@ final class MatomoConfigFactoryTest extends TestCase
             'MmdMatomoAnalytics.config.ipAnonymizationLevel' => 2,
             'MmdMatomoAnalytics.config.respectDoNotTrack' => true,
             'MmdMatomoAnalytics.config.requireConsent' => false,
+            'MmdMatomoAnalytics.config.useKlaroConsent' => false,
+            'MmdMatomoAnalytics.config.klaroServiceName' => 'matomo',
             'MmdMatomoAnalytics.config.ecommerceEnabled' => true,
             'MmdMatomoAnalytics.config.trackProductViews' => true,
             'MmdMatomoAnalytics.config.trackCartUpdates' => true,

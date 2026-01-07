@@ -99,6 +99,24 @@
             <helpText lang="de-DE">Nur tracken, nachdem der Benutzer über den Cookie-Consent-Manager zugestimmt hat</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
+
+        <input-field type="bool">
+            <name>useKlaroConsent</name>
+            <label>Use Klaro Consent Manager</label>
+            <label lang="de-DE">Klaro Consent Manager verwenden</label>
+            <helpText>Enable integration with MmdKlaroConsent plugin. Script will only load after user consent.</helpText>
+            <helpText lang="de-DE">Integration mit dem MmdKlaroConsent Plugin aktivieren. Das Script wird erst nach Benutzer-Einwilligung geladen.</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>klaroServiceName</name>
+            <label>Klaro Service Name</label>
+            <label lang="de-DE">Klaro Service-Name</label>
+            <helpText>Technical name used in Klaro. Must match the service registered in Klaro admin.</helpText>
+            <helpText lang="de-DE">Technischer Name in Klaro. Muss mit dem in der Klaro-Admin registrierten Service übereinstimmen.</helpText>
+            <defaultValue>matomo</defaultValue>
+        </input-field>
     </card>
 
     <!-- E-Commerce Configuration -->

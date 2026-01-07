@@ -41,8 +41,9 @@ final class StorefrontRenderSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Check if tracking is allowed (DNT, consent, etc.)
-        if (!$this->consentChecker->isTrackingAllowed($salesChannelId)) {
+        // When using Klaro, skip consent check here - Klaro handles it in the frontend
+        // For non-Klaro mode, check if tracking is allowed (DNT, consent, etc.)
+        if (!$config->usesKlaroConsent() && !$this->consentChecker->isTrackingAllowed($salesChannelId)) {
             return;
         }
 
@@ -58,6 +59,8 @@ final class StorefrontRenderSubscriber implements EventSubscriberInterface
             'ecommerceEnabled' => $config->isEcommerceEnabled(),
             'matomoUrl' => $config->getNormalizedMatomoUrl(),
             'siteId' => $config->getSiteId(),
+            'useKlaroConsent' => $config->usesKlaroConsent(),
+            'klaroServiceName' => $config->getKlaroServiceName(),
         ]);
     }
 }

@@ -36,6 +36,8 @@ final class MatomoConfigFactory
             ipAnonymizationLevel: $this->getInt('ipAnonymizationLevel', $salesChannelId, 2),
             respectDoNotTrack: $this->getBool('respectDoNotTrack', $salesChannelId, true),
             requireConsent: $this->getBool('requireConsent', $salesChannelId),
+            useKlaroConsent: $this->getBool('useKlaroConsent', $salesChannelId),
+            klaroServiceName: $this->getString('klaroServiceName', $salesChannelId, 'matomo'),
             ecommerceEnabled: $this->getBool('ecommerceEnabled', $salesChannelId, true),
             trackProductViews: $this->getBool('trackProductViews', $salesChannelId, true),
             trackCartUpdates: $this->getBool('trackCartUpdates', $salesChannelId, true),
