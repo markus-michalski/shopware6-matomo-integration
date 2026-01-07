@@ -1,0 +1,35 @@
+{#
+    Matomo Opt-Out Component
+
+    Include this component in your privacy policy page to allow users
+    to opt out of Matomo tracking.
+
+    Usage in CMS pages or custom templates:
+    {% sw_include '@MmdMatomoAnalytics/storefront/component/matomo-opt-out.html.twig' %}
+
+    Or with custom options:
+    {% sw_include '@MmdMatomoAnalytics/storefront/component/matomo-opt-out.html.twig' with {
+        language: 'de',
+        backgroundColor: 'f5f5f5',
+        fontColor: '333333'
+    } %}
+#}
+
+{% set language = language|default(app.request.locale|slice(0, 2)) %}
+{% set backgroundColor = backgroundColor|default('ffffff') %}
+{% set fontColor = fontColor|default('000000') %}
+
+<div class="matomo-opt-out-container">
+    {% if matomo_is_enabled() %}
+        {{ matomo_opt_out_iframe(null, language, backgroundColor, fontColor)|raw }}
+    {% else %}
+        <p class="text-muted">
+            {% if shopware.config.MmdMatomoAnalytics.config.cookielessTracking %}
+                {# Cookie-less tracking enabled - no opt-out needed #}
+                {{ "mmd-matomo.optOut.cookieless"|trans|sw_sanitize }}
+            {% else %}
+                {{ "mmd-matomo.optOut.disabled"|trans|sw_sanitize }}
+            {% endif %}
+        </p>
+    {% endif %}
+</div>

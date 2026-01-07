@@ -1,0 +1,23 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{# Inject Matomo tracking code before closing body tag #}
+{% block base_body_script %}
+    {{ parent() }}
+
+    {# Main Matomo tracking code #}
+    {% if matomoTrackingCode is defined and matomoTrackingCode %}
+        <script>
+            {{ matomoTrackingCode|raw }}
+        </script>
+    {% endif %}
+
+    {# E-Commerce tracking code (product view, cart, order) #}
+    {% if page.extensions.matomoEcommerce is defined %}
+        {% set ecommerce = page.extensions.matomoEcommerce %}
+        {% if ecommerce.trackingCode is defined and ecommerce.trackingCode %}
+            <script>
+                {{ ecommerce.trackingCode|raw }}
+            </script>
+        {% endif %}
+    {% endif %}
+{% endblock %}

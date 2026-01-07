@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false"/>
+
+        <!-- Configuration -->
+        <service id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <!-- Services -->
+        <service id="Mmd\MatomoAnalytics\Service\TrackingCodeRenderer">
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+        </service>
+
+        <service id="Mmd\MatomoAnalytics\Service\EcommerceTracker">
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+        </service>
+
+        <service id="Mmd\MatomoAnalytics\Service\ConsentChecker">
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <argument type="service" id="request_stack"/>
+        </service>
+
+        <!-- Twig Extension -->
+        <service id="Mmd\MatomoAnalytics\Twig\MatomoExtension">
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\TrackingCodeRenderer"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <tag name="twig.extension"/>
+        </service>
+
+        <!-- Subscribers -->
+        <service id="Mmd\MatomoAnalytics\Subscriber\StorefrontRenderSubscriber">
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\TrackingCodeRenderer"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\ConsentChecker"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Mmd\MatomoAnalytics\Subscriber\ProductPageSubscriber">
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\EcommerceTracker"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Mmd\MatomoAnalytics\Subscriber\CheckoutSubscriber">
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\EcommerceTracker"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Mmd\MatomoAnalytics\Subscriber\OrderCompletedSubscriber">
+            <argument type="service" id="Mmd\MatomoAnalytics\Service\EcommerceTracker"/>
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <argument type="service" id="order.repository"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Storefront Controller -->
+        <service id="Mmd\MatomoAnalytics\Storefront\Controller\MatomoOptOutController" public="true">
+            <argument type="service" id="Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
+    </services>
+</container>

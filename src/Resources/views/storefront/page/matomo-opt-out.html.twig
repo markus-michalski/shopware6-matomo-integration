@@ -1,0 +1,25 @@
+{% sw_extends '@Storefront/storefront/page/content/index.html.twig' %}
+
+{% block base_main_inner %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8 offset-lg-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ "mmd-matomo.optOut.title"|trans|sw_sanitize }}</h1>
+
+                        <p class="card-text">{{ "mmd-matomo.optOut.description"|trans|sw_sanitize }}</p>
+
+                        {% sw_include '@MmdMatomoAnalytics/storefront/component/matomo-opt-out.html.twig' %}
+
+                        <hr>
+
+                        <p class="small text-muted">
+                            {{ "mmd-matomo.optOut.info"|trans|sw_sanitize }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

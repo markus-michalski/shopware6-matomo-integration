@@ -1,0 +1,11 @@
+{
+    "mmd-matomo": {
+        "optOut": {
+            "title": "Matomo Analytics Opt-Out",
+            "description": "Here you can disable the Matomo web analytics tool for this website.",
+            "info": "We use Matomo to analyze visitor behavior on our website. Your privacy is important to us.",
+            "cookieless": "This website uses privacy-friendly tracking without cookies. No opt-out is required.",
+            "disabled": "Web analytics is disabled on this website."
+        }
+    }
+}
