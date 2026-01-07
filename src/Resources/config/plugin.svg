@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#f5f5f5"/>
+
+  <!-- Main circle background (Matomo green) -->
+  <circle cx="100" cy="100" r="85" fill="#3152A0"/>
+
+  <!-- Bar chart -->
+  <!-- Bar 1 (shortest) -->
+  <rect x="45" y="120" width="25" height="40" rx="3" fill="white"/>
+
+  <!-- Bar 2 (medium) -->
+  <rect x="80" y="90" width="25" height="70" rx="3" fill="white"/>
+
+  <!-- Bar 3 (tallest) -->
+  <rect x="115" y="55" width="25" height="105" rx="3" fill="white"/>
+
+  <!-- Trend line (jagged/zigzag) -->
+  <polyline points="40,130 55,115 70,125 85,95 100,105 115,70 130,80 145,45"
+            stroke="#4CAF50"
+            stroke-width="5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"/>
+</svg>
