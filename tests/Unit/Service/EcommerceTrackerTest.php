@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mmd\MatomoAnalytics\Tests\Unit\Service;
 
-use Mmd\MatomoAnalytics\Configuration\MatomoConfig;
 use Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory;
 use Mmd\MatomoAnalytics\Service\EcommerceTracker;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,30 +17,31 @@ use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 #[CoversClass(EcommerceTracker::class)]
 final class EcommerceTrackerTest extends TestCase
 {
-    private MatomoConfigFactory&MockObject $configFactory;
+    private SystemConfigService&MockObject $systemConfigService;
+    private MatomoConfigFactory $configFactory;
     private EcommerceTracker $tracker;
 
     protected function setUp(): void
     {
-        $this->configFactory = $this->createMock(MatomoConfigFactory::class);
+        $this->systemConfigService = $this->createMock(SystemConfigService::class);
+        $this->configFactory = new MatomoConfigFactory($this->systemConfigService);
         $this->tracker = new EcommerceTracker($this->configFactory);
     }
 
     #[Test]
     public function itReturnsEmptyStringWhenEcommerceDisabled(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: false);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(ecommerceEnabled: false));
 
         $product = $this->createProduct('SW10001', 'Test Product', 29.99);
 
@@ -53,8 +53,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itReturnsEmptyStringWhenProductViewsDisabled(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackProductViews: false);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackProductViews: false,
+        ));
 
         $product = $this->createProduct('SW10001', 'Test Product', 29.99);
 
@@ -66,8 +68,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksProductView(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackProductViews: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackProductViews: true,
+        ));
 
         $product = $this->createProduct('SW10001', 'Test Product', 29.99);
 
@@ -83,8 +87,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksProductViewWithoutCategory(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackProductViews: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackProductViews: true,
+        ));
 
         $product = $this->createProduct('SW10001', 'Test Product', 29.99);
 
@@ -97,8 +103,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itReturnsEmptyStringWhenCartTrackingDisabled(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackCartUpdates: false);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackCartUpdates: false,
+        ));
 
         $cart = $this->createCart([]);
 
@@ -110,8 +118,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksCartUpdate(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackCartUpdates: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackCartUpdates: true,
+        ));
 
         $cart = $this->createCart([
             ['sku' => 'SW10001', 'name' => 'Product 1', 'price' => 19.99, 'qty' => 2],
@@ -130,8 +140,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itReturnsEmptyStringWhenOrderTrackingDisabled(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackOrders: false);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackOrders: false,
+        ));
 
         $order = $this->createOrder('ORD-001', 99.99, 84.03, 15.96, 5.99);
 
@@ -143,8 +155,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksOrder(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackOrders: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackOrders: true,
+        ));
 
         $order = $this->createOrder('ORD-001', 99.99, 84.03, 15.96, 5.99);
 
@@ -161,8 +175,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksOrderWithLineItems(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackOrders: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackOrders: true,
+        ));
 
         $order = $this->createOrderWithLineItems('ORD-002', [
             ['sku' => 'SW10001', 'name' => 'Product 1', 'price' => 19.99, 'qty' => 2],
@@ -179,8 +195,10 @@ final class EcommerceTrackerTest extends TestCase
     #[Test]
     public function itTracksAddToCart(): void
     {
-        $config = $this->createConfig(ecommerceEnabled: true, trackCartUpdates: true);
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackCartUpdates: true,
+        ));
 
         $lineItem = $this->createLineItem('SW10001', 'Test Product', 29.99, 1);
 
@@ -191,32 +209,51 @@ final class EcommerceTrackerTest extends TestCase
         self::assertStringContainsString('"Test Product"', $result);
     }
 
-    private function createConfig(
+    /**
+     * Mock SystemConfigService to return config values from array
+     *
+     * @param array<string, mixed> $configArray
+     */
+    private function mockConfigFromArray(array $configArray): void
+    {
+        $this->systemConfigService
+            ->method('get')
+            ->willReturnCallback(function (string $key) use ($configArray) {
+                $configKey = str_replace('MmdMatomoAnalytics.config.', '', $key);
+
+                return $configArray[$configKey] ?? null;
+            });
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createConfigArray(
         bool $ecommerceEnabled = true,
         bool $trackProductViews = true,
         bool $trackCartUpdates = true,
         bool $trackOrders = true,
-    ): MatomoConfig {
-        return new MatomoConfig(
-            matomoUrl: 'https://analytics.example.com',
-            siteId: 1,
-            trackingEnabled: true,
-            cookielessTracking: true,
-            ipAnonymizationLevel: 2,
-            respectDoNotTrack: true,
-            requireConsent: false,
-            useKlaroConsent: false,
-            klaroServiceName: 'matomo',
-            ecommerceEnabled: $ecommerceEnabled,
-            trackProductViews: $trackProductViews,
-            trackCartUpdates: $trackCartUpdates,
-            trackOrders: $trackOrders,
-            trackAdminUsers: false,
-            enableHeartbeatTimer: false,
-            heartbeatInterval: 15,
-            trackLinks: true,
-            trackDownloads: true,
-        );
+    ): array {
+        return [
+            'matomoUrl' => 'https://analytics.example.com',
+            'siteId' => 1,
+            'trackingEnabled' => true,
+            'cookielessTracking' => true,
+            'ipAnonymizationLevel' => 2,
+            'respectDoNotTrack' => true,
+            'requireConsent' => false,
+            'useKlaroConsent' => false,
+            'klaroServiceName' => 'matomo',
+            'ecommerceEnabled' => $ecommerceEnabled,
+            'trackProductViews' => $trackProductViews,
+            'trackCartUpdates' => $trackCartUpdates,
+            'trackOrders' => $trackOrders,
+            'trackAdminUsers' => false,
+            'enableHeartbeatTimer' => false,
+            'heartbeatInterval' => 15,
+            'trackLinks' => true,
+            'trackDownloads' => true,
+        ];
     }
 
     private function createProduct(string $productNumber, string $name, float $price): SalesChannelProductEntity
@@ -271,6 +308,7 @@ final class EcommerceTrackerTest extends TestCase
     {
         $lineItem = new LineItem(Uuid::randomHex(), LineItem::PRODUCT_LINE_ITEM_TYPE);
         $lineItem->setLabel($name);
+        $lineItem->setStackable(true);
         $lineItem->setQuantity($quantity);
         $lineItem->setPayload(['productNumber' => $sku]);
         $lineItem->setPrice(

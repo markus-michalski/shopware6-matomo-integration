@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mmd\MatomoAnalytics\Tests\Unit\Twig;
 
-use Mmd\MatomoAnalytics\Configuration\MatomoConfig;
 use Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory;
 use Mmd\MatomoAnalytics\Service\TrackingCodeRenderer;
 use Mmd\MatomoAnalytics\Twig\MatomoExtension;
@@ -12,18 +11,21 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 #[CoversClass(MatomoExtension::class)]
 final class MatomoExtensionTest extends TestCase
 {
-    private TrackingCodeRenderer&MockObject $renderer;
-    private MatomoConfigFactory&MockObject $configFactory;
+    private SystemConfigService&MockObject $systemConfigService;
+    private MatomoConfigFactory $configFactory;
+    private TrackingCodeRenderer $renderer;
     private MatomoExtension $extension;
 
     protected function setUp(): void
     {
-        $this->renderer = $this->createMock(TrackingCodeRenderer::class);
-        $this->configFactory = $this->createMock(MatomoConfigFactory::class);
+        $this->systemConfigService = $this->createMock(SystemConfigService::class);
+        $this->configFactory = new MatomoConfigFactory($this->systemConfigService);
+        $this->renderer = new TrackingCodeRenderer($this->configFactory);
         $this->extension = new MatomoExtension($this->renderer, $this->configFactory);
     }
 
@@ -44,28 +46,29 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itRendersTrackingCode(): void
     {
-        $this->renderer->method('render')->willReturn('var _paq = [];');
+        $this->mockConfigFromArray($this->createValidConfigArray());
 
         $result = $this->extension->renderTrackingCode(null);
 
-        self::assertSame('var _paq = [];', $result);
+        self::assertStringContainsString('var _paq', $result);
+        self::assertStringContainsString('trackPageView', $result);
     }
 
     #[Test]
     public function itRendersTrackingScript(): void
     {
-        $this->renderer->method('renderWithScriptTag')->willReturn('<script>var _paq = [];</script>');
+        $this->mockConfigFromArray($this->createValidConfigArray());
 
         $result = $this->extension->renderTrackingScript(null);
 
-        self::assertSame('<script>var _paq = [];</script>', $result);
+        self::assertStringStartsWith('<script>', $result);
+        self::assertStringEndsWith('</script>', $result);
     }
 
     #[Test]
     public function itRendersOptOutIframe(): void
     {
-        $config = $this->createValidConfig();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createValidConfigArray());
 
         $result = $this->extension->renderOptOutIframe(null, 'de', 'ffffff', '000000');
 
@@ -79,8 +82,7 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itReturnsEmptyStringForOptOutIframeWhenInvalid(): void
     {
-        $config = $this->createInvalidConfig();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createInvalidConfigArray());
 
         $result = $this->extension->renderOptOutIframe(null);
 
@@ -90,8 +92,7 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itChecksIfEnabled(): void
     {
-        $config = $this->createValidConfig();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createValidConfigArray());
 
         self::assertTrue($this->extension->isEnabled(null));
     }
@@ -99,8 +100,7 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itChecksIfNotEnabled(): void
     {
-        $config = $this->createInvalidConfig();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createInvalidConfigArray());
 
         self::assertFalse($this->extension->isEnabled(null));
     }
@@ -108,8 +108,7 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itChecksIfEcommerceEnabled(): void
     {
-        $config = $this->createValidConfig();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createValidConfigArray());
 
         self::assertTrue($this->extension->isEcommerceEnabled(null));
     }
@@ -117,81 +116,105 @@ final class MatomoExtensionTest extends TestCase
     #[Test]
     public function itChecksIfEcommerceNotEnabled(): void
     {
-        $config = $this->createConfigWithoutEcommerce();
-        $this->configFactory->method('createForSalesChannel')->willReturn($config);
+        $this->mockConfigFromArray($this->createConfigWithoutEcommerceArray());
 
         self::assertFalse($this->extension->isEcommerceEnabled(null));
     }
 
-    private function createValidConfig(): MatomoConfig
+    /**
+     * Mock SystemConfigService to return config values from array
+     *
+     * @param array<string, mixed> $configArray
+     */
+    private function mockConfigFromArray(array $configArray): void
     {
-        return new MatomoConfig(
-            matomoUrl: 'https://analytics.example.com',
-            siteId: 1,
-            trackingEnabled: true,
-            cookielessTracking: true,
-            ipAnonymizationLevel: 2,
-            respectDoNotTrack: true,
-            requireConsent: false,
-            useKlaroConsent: false,
-            klaroServiceName: 'matomo',
-            ecommerceEnabled: true,
-            trackProductViews: true,
-            trackCartUpdates: true,
-            trackOrders: true,
-            trackAdminUsers: false,
-            enableHeartbeatTimer: false,
-            heartbeatInterval: 15,
-            trackLinks: true,
-            trackDownloads: true,
-        );
+        $this->systemConfigService
+            ->method('get')
+            ->willReturnCallback(function (string $key) use ($configArray) {
+                $configKey = str_replace('MmdMatomoAnalytics.config.', '', $key);
+
+                return $configArray[$configKey] ?? null;
+            });
     }
 
-    private function createInvalidConfig(): MatomoConfig
+    /**
+     * @return array<string, mixed>
+     */
+    private function createValidConfigArray(): array
     {
-        return new MatomoConfig(
-            matomoUrl: '',
-            siteId: 0,
-            trackingEnabled: false,
-            cookielessTracking: true,
-            ipAnonymizationLevel: 2,
-            respectDoNotTrack: true,
-            requireConsent: false,
-            useKlaroConsent: false,
-            klaroServiceName: 'matomo',
-            ecommerceEnabled: true,
-            trackProductViews: true,
-            trackCartUpdates: true,
-            trackOrders: true,
-            trackAdminUsers: false,
-            enableHeartbeatTimer: false,
-            heartbeatInterval: 15,
-            trackLinks: true,
-            trackDownloads: true,
-        );
+        return [
+            'matomoUrl' => 'https://analytics.example.com',
+            'siteId' => 1,
+            'trackingEnabled' => true,
+            'cookielessTracking' => true,
+            'ipAnonymizationLevel' => 2,
+            'respectDoNotTrack' => true,
+            'requireConsent' => false,
+            'useKlaroConsent' => false,
+            'klaroServiceName' => 'matomo',
+            'ecommerceEnabled' => true,
+            'trackProductViews' => true,
+            'trackCartUpdates' => true,
+            'trackOrders' => true,
+            'trackAdminUsers' => false,
+            'enableHeartbeatTimer' => false,
+            'heartbeatInterval' => 15,
+            'trackLinks' => true,
+            'trackDownloads' => true,
+        ];
     }
 
-    private function createConfigWithoutEcommerce(): MatomoConfig
+    /**
+     * @return array<string, mixed>
+     */
+    private function createInvalidConfigArray(): array
     {
-        return new MatomoConfig(
-            matomoUrl: 'https://analytics.example.com',
-            siteId: 1,
-            trackingEnabled: true,
-            cookielessTracking: true,
-            ipAnonymizationLevel: 2,
-            respectDoNotTrack: true,
-            requireConsent: false,
-            useKlaroConsent: false,
-            klaroServiceName: 'matomo',
-            ecommerceEnabled: false,
-            trackProductViews: true,
-            trackCartUpdates: true,
-            trackOrders: true,
-            trackAdminUsers: false,
-            enableHeartbeatTimer: false,
-            heartbeatInterval: 15,
-            trackLinks: true,
-            trackDownloads: true,
-        );
+        return [
+            'matomoUrl' => '',
+            'siteId' => 0,
+            'trackingEnabled' => false,
+            'cookielessTracking' => true,
+            'ipAnonymizationLevel' => 2,
+            'respectDoNotTrack' => true,
+            'requireConsent' => false,
+            'useKlaroConsent' => false,
+            'klaroServiceName' => 'matomo',
+            'ecommerceEnabled' => true,
+            'trackProductViews' => true,
+            'trackCartUpdates' => true,
+            'trackOrders' => true,
+            'trackAdminUsers' => false,
+            'enableHeartbeatTimer' => false,
+            'heartbeatInterval' => 15,
+            'trackLinks' => true,
+            'trackDownloads' => true,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createConfigWithoutEcommerceArray(): array
+    {
+        return [
+            'matomoUrl' => 'https://analytics.example.com',
+            'siteId' => 1,
+            'trackingEnabled' => true,
+            'cookielessTracking' => true,
+            'ipAnonymizationLevel' => 2,
+            'respectDoNotTrack' => true,
+            'requireConsent' => false,
+            'useKlaroConsent' => false,
+            'klaroServiceName' => 'matomo',
+            'ecommerceEnabled' => false,
+            'trackProductViews' => true,
+            'trackCartUpdates' => true,
+            'trackOrders' => true,
+            'trackAdminUsers' => false,
+            'enableHeartbeatTimer' => false,
+            'heartbeatInterval' => 15,
+            'trackLinks' => true,
+            'trackDownloads' => true,
+        ];
     }
 }

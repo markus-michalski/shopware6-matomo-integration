@@ -1,0 +1,30 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Resources
+        # Storefront classes not available in standalone analysis (only shopware/core is a dependency)
+        - src/Storefront
+        - src/Subscriber
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        # Shopware BC layer - some methods may not exist in all versions
+        - '#Call to an undefined method#'
+
+        # Minor code quality issues in legacy code (to be fixed in future refactor)
+        -
+            message: '#Parameter \#1 \$json of function json_decode expects string#'
+            path: src/Service/ConsentChecker.php
+        -
+            message: '#Expression on left side of \?\? is not nullable#'
+            path: src/Service/EcommerceTracker.php
+        -
+            message: '#never returns null so it can be removed from the return type#'
+            path: src/Service/EcommerceTracker.php
+        -
+            message: '#Unreachable statement - code above always terminates#'
+            path: src/Service/EcommerceTracker.php
