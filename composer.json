@@ -1,55 +1,55 @@
 {
-    "name": "mmd/sw65-matomo-analytics",
-    "description": "Matomo Analytics Integration for Shopware 6 with E-Commerce Tracking and GDPR compliance",
-    "version": "1.0.0",
-    "type": "shopware-platform-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Markus Michalski",
-            "email": "info@markus-michalski.net"
-        }
-    ],
-    "require": {
-        "php": ">=8.1",
-        "shopware/core": "~6.5.0 || ~6.6.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^10.5",
-        "phpstan/phpstan": "^1.10"
-    },
-    "autoload": {
-        "psr-4": {
-            "Mmd\\MatomoAnalytics\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Mmd\\MatomoAnalytics\\Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "shopware-plugin-class": "Mmd\\MatomoAnalytics\\MmdMatomoAnalytics",
-        "label": {
-            "de-DE": "Matomo Analytics",
-            "en-GB": "Matomo Analytics"
-        },
-        "description": {
-            "de-DE": "DSGVO-konforme Matomo Analytics Integration mit E-Commerce Tracking, Cookie-losem Tracking und Opt-Out-Unterstützung.",
-            "en-GB": "GDPR-compliant Matomo Analytics integration with E-Commerce tracking, cookieless tracking and opt-out support."
-        },
-        "manufacturerLink": {
-            "de-DE": "https://markus-michalski.net",
-            "en-GB": "https://markus-michalski.net"
-        },
-        "supportLink": {
-            "de-DE": "https://github.com/markusmichalski-web/shopware6-matomo-integration/issues",
-            "en-GB": "https://github.com/markusmichalski-web/shopware6-matomo-integration/issues"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "symfony/runtime": true
-        }
+  "name": "mmd/sw65-matomo-analytics",
+  "description": "Matomo Analytics Integration for Shopware 6 with E-Commerce Tracking and GDPR compliance",
+  "version": "1.0.0",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Markus Michalski",
+      "email": "info@markus-michalski.net"
     }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "shopware/core": "~6.5.0 || ~6.6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5",
+    "phpstan/phpstan": "^1.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mmd\\MatomoAnalytics\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mmd\\MatomoAnalytics\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Mmd\\MatomoAnalytics\\MmdMatomoAnalytics",
+    "label": {
+      "de-DE": "Matomo Analytics",
+      "en-GB": "Matomo Analytics"
+    },
+    "description": {
+      "de-DE": "DSGVO-konforme Matomo Analytics Integration mit E-Commerce Tracking, Cookie-losem Tracking und Opt-Out-Unterstützung.",
+      "en-GB": "GDPR-compliant Matomo Analytics integration with E-Commerce tracking, cookieless tracking and opt-out support."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://markus-michalski.net",
+      "en-GB": "https://markus-michalski.net"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/markusmichalski-web/shopware6-matomo-integration/issues",
+      "en-GB": "https://github.com/markusmichalski-web/shopware6-matomo-integration/issues"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
+  }
 }
