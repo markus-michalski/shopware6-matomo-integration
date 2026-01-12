@@ -4,14 +4,14 @@
 
     <!-- Basic Matomo Configuration -->
     <card>
-        <title>Matomo Server</title>
+        <title lang="en-GB">Matomo Server</title>
         <title lang="de-DE">Matomo Server</title>
 
         <input-field type="url">
             <name>matomoUrl</name>
-            <label>Matomo URL</label>
+            <label lang="en-GB">Matomo URL</label>
             <label lang="de-DE">Matomo URL</label>
-            <helpText>URL to your Matomo instance (e.g., https://analytics.example.com)</helpText>
+            <helpText lang="en-GB">URL to your Matomo instance (e.g., https://analytics.example.com)</helpText>
             <helpText lang="de-DE">URL zu Ihrer Matomo-Instanz (z.B. https://analytics.example.com)</helpText>
             <placeholder>https://analytics.example.com</placeholder>
             <required>true</required>
@@ -19,9 +19,9 @@
 
         <input-field type="int">
             <name>siteId</name>
-            <label>Site ID</label>
+            <label lang="en-GB">Site ID</label>
             <label lang="de-DE">Site ID</label>
-            <helpText>The Site ID from your Matomo dashboard</helpText>
+            <helpText lang="en-GB">The Site ID from your Matomo dashboard</helpText>
             <helpText lang="de-DE">Die Site ID aus Ihrem Matomo Dashboard</helpText>
             <placeholder>1</placeholder>
             <required>true</required>
@@ -29,9 +29,9 @@
 
         <input-field type="bool">
             <name>trackingEnabled</name>
-            <label>Enable Tracking</label>
+            <label lang="en-GB">Enable Tracking</label>
             <label lang="de-DE">Tracking aktivieren</label>
-            <helpText>Master switch to enable/disable all tracking</helpText>
+            <helpText lang="en-GB">Master switch to enable/disable all tracking</helpText>
             <helpText lang="de-DE">Hauptschalter zum Aktivieren/Deaktivieren des gesamten Trackings</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
@@ -39,43 +39,43 @@
 
     <!-- Privacy Configuration -->
     <card>
-        <title>Privacy Settings</title>
+        <title lang="en-GB">Privacy Settings</title>
         <title lang="de-DE">Datenschutz-Einstellungen</title>
 
         <input-field type="bool">
             <name>cookielessTracking</name>
-            <label>Cookieless Tracking</label>
+            <label lang="en-GB">Cookieless Tracking</label>
             <label lang="de-DE">Cookie-loses Tracking</label>
-            <helpText>Track without setting cookies (recommended for GDPR compliance without consent)</helpText>
+            <helpText lang="en-GB">Track without setting cookies (recommended for GDPR compliance without consent)</helpText>
             <helpText lang="de-DE">Tracking ohne Cookies (empfohlen für DSGVO-Konformität ohne Einwilligung)</helpText>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="single-select">
             <name>ipAnonymizationLevel</name>
-            <label>IP Anonymization</label>
+            <label lang="en-GB">IP Anonymization</label>
             <label lang="de-DE">IP-Anonymisierung</label>
-            <helpText>Number of bytes to mask in visitor IP addresses</helpText>
+            <helpText lang="en-GB">Number of bytes to mask in visitor IP addresses</helpText>
             <helpText lang="de-DE">Anzahl der zu maskierenden Bytes in Besucher-IP-Adressen</helpText>
             <options>
                 <option>
                     <id>0</id>
-                    <name>Disabled (not recommended)</name>
+                    <name lang="en-GB">Disabled (not recommended)</name>
                     <name lang="de-DE">Deaktiviert (nicht empfohlen)</name>
                 </option>
                 <option>
                     <id>1</id>
-                    <name>1 Byte (192.168.1.xxx)</name>
+                    <name lang="en-GB">1 Byte (192.168.1.xxx)</name>
                     <name lang="de-DE">1 Byte (192.168.1.xxx)</name>
                 </option>
                 <option>
                     <id>2</id>
-                    <name>2 Bytes (192.168.xxx.xxx) - Recommended</name>
+                    <name lang="en-GB">2 Bytes (192.168.xxx.xxx) - Recommended</name>
                     <name lang="de-DE">2 Bytes (192.168.xxx.xxx) - Empfohlen</name>
                 </option>
                 <option>
                     <id>3</id>
-                    <name>3 Bytes (192.xxx.xxx.xxx)</name>
+                    <name lang="en-GB">3 Bytes (192.xxx.xxx.xxx)</name>
                     <name lang="de-DE">3 Bytes (192.xxx.xxx.xxx)</name>
                 </option>
             </options>
@@ -84,36 +84,36 @@
 
         <input-field type="bool">
             <name>respectDoNotTrack</name>
-            <label>Respect Do-Not-Track</label>
+            <label lang="en-GB">Respect Do-Not-Track</label>
             <label lang="de-DE">Do-Not-Track respektieren</label>
-            <helpText>Disable tracking for visitors with DNT header enabled</helpText>
+            <helpText lang="en-GB">Disable tracking for visitors with DNT header enabled</helpText>
             <helpText lang="de-DE">Tracking für Besucher mit aktiviertem DNT-Header deaktivieren</helpText>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>requireConsent</name>
-            <label>Require Cookie Consent</label>
+            <label lang="en-GB">Require Cookie Consent</label>
             <label lang="de-DE">Cookie-Einwilligung erforderlich</label>
-            <helpText>Only track after user has given consent via cookie consent manager</helpText>
+            <helpText lang="en-GB">Only track after user has given consent via cookie consent manager</helpText>
             <helpText lang="de-DE">Nur tracken, nachdem der Benutzer über den Cookie-Consent-Manager zugestimmt hat</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>useKlaroConsent</name>
-            <label>Use Klaro Consent Manager</label>
+            <label lang="en-GB">Use Klaro Consent Manager</label>
             <label lang="de-DE">Klaro Consent Manager verwenden</label>
-            <helpText>Requires the MmdKlaroConsent plugin to be installed and configured. When enabled, tracking scripts will only load after user consent via Klaro.</helpText>
+            <helpText lang="en-GB">Requires the MmdKlaroConsent plugin to be installed and configured. When enabled, tracking scripts will only load after user consent via Klaro.</helpText>
             <helpText lang="de-DE">Erfordert das installierte und konfigurierte MmdKlaroConsent Plugin. Bei Aktivierung werden Tracking-Scripts erst nach Benutzer-Einwilligung über Klaro geladen.</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="text">
             <name>klaroServiceName</name>
-            <label>Klaro Service Name</label>
+            <label lang="en-GB">Klaro Service Name</label>
             <label lang="de-DE">Klaro Service-Name</label>
-            <helpText>Technical service name for Klaro integration. Must match the service name configured in MmdKlaroConsent plugin settings.</helpText>
+            <helpText lang="en-GB">Technical service name for Klaro integration. Must match the service name configured in MmdKlaroConsent plugin settings.</helpText>
             <helpText lang="de-DE">Technischer Service-Name für die Klaro-Integration. Muss mit dem in den MmdKlaroConsent Plugin-Einstellungen konfigurierten Service-Namen übereinstimmen.</helpText>
             <defaultValue>matomo</defaultValue>
         </input-field>
@@ -121,35 +121,35 @@
 
     <!-- E-Commerce Configuration -->
     <card>
-        <title>E-Commerce Tracking</title>
+        <title lang="en-GB">E-Commerce Tracking</title>
         <title lang="de-DE">E-Commerce Tracking</title>
 
         <input-field type="bool">
             <name>ecommerceEnabled</name>
-            <label>Enable E-Commerce Tracking</label>
+            <label lang="en-GB">Enable E-Commerce Tracking</label>
             <label lang="de-DE">E-Commerce Tracking aktivieren</label>
-            <helpText>Track product views, cart updates, and orders</helpText>
+            <helpText lang="en-GB">Track product views, cart updates, and orders</helpText>
             <helpText lang="de-DE">Produktansichten, Warenkorb-Änderungen und Bestellungen tracken</helpText>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>trackProductViews</name>
-            <label>Track Product Views</label>
+            <label lang="en-GB">Track Product Views</label>
             <label lang="de-DE">Produktansichten tracken</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>trackCartUpdates</name>
-            <label>Track Cart Updates</label>
+            <label lang="en-GB">Track Cart Updates</label>
             <label lang="de-DE">Warenkorb-Änderungen tracken</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>trackOrders</name>
-            <label>Track Orders</label>
+            <label lang="en-GB">Track Orders</label>
             <label lang="de-DE">Bestellungen tracken</label>
             <defaultValue>true</defaultValue>
         </input-field>
@@ -157,44 +157,44 @@
 
     <!-- Advanced Configuration -->
     <card>
-        <title>Advanced Settings</title>
+        <title lang="en-GB">Advanced Settings</title>
         <title lang="de-DE">Erweiterte Einstellungen</title>
 
         <input-field type="bool">
             <name>trackAdminUsers</name>
-            <label>Track Admin Users</label>
+            <label lang="en-GB">Track Admin Users</label>
             <label lang="de-DE">Admin-Benutzer tracken</label>
-            <helpText>Include logged-in admin users in tracking</helpText>
+            <helpText lang="en-GB">Include logged-in admin users in tracking</helpText>
             <helpText lang="de-DE">Eingeloggte Admin-Benutzer beim Tracking einschließen</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>enableHeartbeatTimer</name>
-            <label>Enable Heartbeat Timer</label>
+            <label lang="en-GB">Enable Heartbeat Timer</label>
             <label lang="de-DE">Heartbeat-Timer aktivieren</label>
-            <helpText>Track actual time on page (sends ping every 15 seconds)</helpText>
+            <helpText lang="en-GB">Track actual time on page (sends ping every 15 seconds)</helpText>
             <helpText lang="de-DE">Tatsächliche Verweildauer tracken (sendet alle 15 Sekunden ein Signal)</helpText>
             <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="int">
             <name>heartbeatInterval</name>
-            <label>Heartbeat Interval (seconds)</label>
+            <label lang="en-GB">Heartbeat Interval (seconds)</label>
             <label lang="de-DE">Heartbeat-Intervall (Sekunden)</label>
             <defaultValue>15</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>trackLinks</name>
-            <label>Track Outbound Links</label>
+            <label lang="en-GB">Track Outbound Links</label>
             <label lang="de-DE">Ausgehende Links tracken</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>trackDownloads</name>
-            <label>Track Downloads</label>
+            <label lang="en-GB">Track Downloads</label>
             <label lang="de-DE">Downloads tracken</label>
             <defaultValue>true</defaultValue>
         </input-field>
