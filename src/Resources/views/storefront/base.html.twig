@@ -26,19 +26,50 @@
                 {% endif %}
             {% endif %}
 
-            {# Klaro consent change handler for dynamic E-Commerce tracking #}
+            {# Klaro consent change handler - grants/revokes Matomo consent #}
             <script>
                 (function() {
                     var serviceName = '{{ matomoConfig.klaroServiceName }}';
+                    var consentGranted = false;
 
+                    function handleConsent(granted) {
+                        if (typeof window._paq === 'undefined') {
+                            return;
+                        }
+
+                        if (granted && !consentGranted) {
+                            _paq.push(['setConsentGiven']);
+                            consentGranted = true;
+                        } else if (!granted && consentGranted) {
+                            _paq.push(['forgetConsentGiven']);
+                            consentGranted = false;
+                        }
+                    }
+
+                    // Listen for consent changes
                     window.addEventListener('klaro-consent-change', function(e) {
                         var consents = e.detail.consents || {};
-
-                        if (consents[serviceName] === true && typeof window._paq !== 'undefined') {
-                            // Matomo was just enabled - track page view if not already done
-                            console.log('[Matomo] Consent granted for service: ' + serviceName);
-                        }
+                        handleConsent(consents[serviceName] === true);
                     });
+
+                    // Check initial consent state when Klaro is ready
+                    function checkInitialConsent() {
+                        if (typeof window.klaro !== 'undefined' && typeof window.klaro.getManager === 'function') {
+                            var manager = window.klaro.getManager();
+                            if (manager && typeof manager.getConsent === 'function') {
+                                handleConsent(manager.getConsent(serviceName) === true);
+                            }
+                        }
+                    }
+
+                    // Try immediately and also after DOM is ready
+                    if (document.readyState === 'complete') {
+                        setTimeout(checkInitialConsent, 100);
+                    } else {
+                        window.addEventListener('load', function() {
+                            setTimeout(checkInitialConsent, 100);
+                        });
+                    }
                 })();
             </script>
         {% else %}
