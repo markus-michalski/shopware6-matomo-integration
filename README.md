@@ -30,7 +30,6 @@ Privacy-friendly web analytics for Shopware 6.5/6.6 with E-Commerce tracking, Kl
 
 ```bash
 composer require mmd/sw66-matomo-analytics
-bin/console plugin:refresh
 bin/console plugin:install --activate MmdMatomoAnalytics
 bin/console cache:clear
 ```
