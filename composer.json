@@ -3,7 +3,7 @@
   "description": "Matomo Analytics Integration for Shopware 6 with E-Commerce Tracking and GDPR compliance",
   "version": "1.0.0",
   "type": "shopware-platform-plugin",
-  "license": "MIT",
+  "license": "proprietary",
   "authors": [
     {
       "name": "Markus Michalski",

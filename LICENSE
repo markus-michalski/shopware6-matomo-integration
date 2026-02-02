@@ -1,0 +1,60 @@
+Commercial License
+
+Copyright (c) 2024-2025 Markus Michalski
+All rights reserved.
+
+GRANT OF LICENSE
+This software is licensed, not sold. Upon purchase, you are granted a non-exclusive,
+non-transferable license to:
+
+1. Install and use this software on ONE (1) Shopware 6 installation,
+   including all Sales Channels within that installation
+2. Modify the source code solely for your own internal use
+3. Create backup copies for archival purposes
+
+DEFINITIONS
+"Installation" means a single Shopware 6 deployment, identified by one database
+and one vendor directory. A Shopware 6 installation with multiple Sales Channels
+counts as ONE installation.
+
+RESTRICTIONS
+You may NOT:
+
+1. Redistribute, resell, sublicense, or share this software with third parties
+2. Transfer your license to another person or organization
+3. Remove, alter, or obscure any copyright notices or proprietary legends
+4. Use this software to create derivative works for distribution
+5. Reverse engineer for the purpose of creating a competing product
+
+DEVELOPMENT AND STAGING
+This license includes the right to use the software on development and staging
+environments that are used exclusively for testing purposes related to the
+licensed production installation.
+
+MULTIPLE INSTALLATIONS
+For use on multiple separate production Shopware 6 installations (e.g., different
+shops for different brands or clients), a separate license must be purchased for
+each production installation.
+
+UPDATES AND SUPPORT
+License includes access to updates and bug fixes for 12 months from purchase date.
+Continued updates require license renewal.
+
+TERMINATION
+This license terminates automatically if you fail to comply with any of its terms.
+Upon termination, you must destroy all copies of the software.
+
+DISCLAIMER OF WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+LIMITATION OF LIABILITY
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+GOVERNING LAW
+This license shall be governed by the laws of Germany.
+
+For licensing inquiries: support@markus-michalski.net

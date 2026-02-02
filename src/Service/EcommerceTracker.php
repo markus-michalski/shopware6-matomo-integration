@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Matomo Analytics for Shopware 6
+ *
+ * @package   Mmd\MatomoAnalytics
+ * @author    Markus Michalski
+ * @copyright 2024-2025 Markus Michalski
+ * @license   Proprietary - see LICENSE file for details
+ */
+
 declare(strict_types=1);
 
 namespace Mmd\MatomoAnalytics\Service;
