@@ -69,7 +69,6 @@ final class MatomoConfigFactoryTest extends TestCase
         self::assertSame(0, $config->getSiteId());
         self::assertFalse($config->isTrackingEnabled());
         self::assertTrue($config->isCookielessTracking());
-        self::assertSame(2, $config->getIpAnonymizationLevel());
         self::assertTrue($config->shouldRespectDoNotTrack());
         self::assertFalse($config->requiresConsent());
         self::assertFalse($config->usesKlaroConsent());
@@ -108,7 +107,6 @@ final class MatomoConfigFactoryTest extends TestCase
             ->willReturnCallback(function (string $key) {
                 return match ($key) {
                     'MmdMatomoAnalytics.config.siteId' => 42,
-                    'MmdMatomoAnalytics.config.ipAnonymizationLevel' => 3,
                     'MmdMatomoAnalytics.config.heartbeatInterval' => 30,
                     default => $this->getDefaultConfigValue($key),
                 };
@@ -117,7 +115,6 @@ final class MatomoConfigFactoryTest extends TestCase
         $config = $this->factory->createForSalesChannel(null);
 
         self::assertSame(42, $config->getSiteId());
-        self::assertSame(3, $config->getIpAnonymizationLevel());
         self::assertSame(30, $config->getHeartbeatInterval());
     }
 
@@ -164,7 +161,6 @@ final class MatomoConfigFactoryTest extends TestCase
             'MmdMatomoAnalytics.config.siteId' => 1,
             'MmdMatomoAnalytics.config.trackingEnabled' => true,
             'MmdMatomoAnalytics.config.cookielessTracking' => true,
-            'MmdMatomoAnalytics.config.ipAnonymizationLevel' => 2,
             'MmdMatomoAnalytics.config.respectDoNotTrack' => true,
             'MmdMatomoAnalytics.config.requireConsent' => false,
             'MmdMatomoAnalytics.config.useKlaroConsent' => false,
@@ -173,7 +169,6 @@ final class MatomoConfigFactoryTest extends TestCase
             'MmdMatomoAnalytics.config.trackProductViews' => true,
             'MmdMatomoAnalytics.config.trackCartUpdates' => true,
             'MmdMatomoAnalytics.config.trackOrders' => true,
-            'MmdMatomoAnalytics.config.trackAdminUsers' => false,
             'MmdMatomoAnalytics.config.enableHeartbeatTimer' => false,
             'MmdMatomoAnalytics.config.heartbeatInterval' => 15,
             'MmdMatomoAnalytics.config.trackLinks' => true,

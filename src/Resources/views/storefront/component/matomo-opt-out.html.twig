@@ -21,7 +21,7 @@
 
 <div class="matomo-opt-out-container">
     {% if matomo_is_enabled() %}
-        {{ matomo_opt_out_iframe(null, language, backgroundColor, fontColor)|raw }}
+        {{ matomo_opt_out_iframe(null, language, backgroundColor, fontColor) }}
     {% else %}
         <p class="text-muted">
             {% if shopware.config.MmdMatomoAnalytics.config.cookielessTracking %}

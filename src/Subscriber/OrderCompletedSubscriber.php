@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -16,7 +16,7 @@ namespace Mmd\MatomoAnalytics\Subscriber;
 use Mmd\MatomoAnalytics\Configuration\MatomoConfigFactory;
 use Mmd\MatomoAnalytics\Service\EcommerceTracker;
 use Mmd\MatomoAnalytics\Struct\MatomoEcommerceStruct;
-use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
+use Shopware\Core\Checkout\Order\OrderCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -32,7 +32,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class OrderCompletedSubscriber implements EventSubscriberInterface
 {
     /**
-     * @param EntityRepository<OrderLineItemCollection> $orderRepository
+     * @param EntityRepository<OrderCollection> $orderRepository
      */
     public function __construct(
         private readonly EcommerceTracker $ecommerceTracker,

@@ -10,7 +10,7 @@
             {# The data-name attribute tells Klaro which service this script belongs to #}
             <script type="text/plain"
                     data-type="text/javascript"
-                    data-name="{{ matomoConfig.klaroServiceName }}">
+                    data-name="{{ matomoConfig.klaroServiceName|e('html_attr') }}">
                 {{ matomoTrackingCode|raw }}
             </script>
 
@@ -20,7 +20,7 @@
                 {% if ecommerce.trackingCode %}
                     <script type="text/plain"
                             data-type="text/javascript"
-                            data-name="{{ matomoConfig.klaroServiceName }}">
+                            data-name="{{ matomoConfig.klaroServiceName|e('html_attr') }}">
                         {{ ecommerce.trackingCode|raw }}
                     </script>
                 {% endif %}
@@ -29,7 +29,7 @@
             {# Klaro consent change handler - grants/revokes Matomo consent #}
             <script>
                 (function() {
-                    var serviceName = '{{ matomoConfig.klaroServiceName }}';
+                    var serviceName = {{ matomoConfig.klaroServiceName|json_encode|raw }};
                     var consentGranted = false;
 
                     function handleConsent(granted) {

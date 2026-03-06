@@ -4,7 +4,7 @@ Privacy-friendly web analytics for Shopware 6.5/6.6 with E-Commerce tracking, Kl
 
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://www.php.net/)
 [![Shopware](https://img.shields.io/badge/Shopware-6.6%20%7C%206.6-blue.svg)](https://www.shopware.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 
 ## Features
 
@@ -69,8 +69,9 @@ Plugin configuration in Shopware Admin:
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Cookieless Tracking | On | Track without cookies - reduces stored data |
-| IP Anonymization | 2 bytes | How many bytes of the IP address to mask |
 | Respect Do-Not-Track | On | Honor browser DNT settings |
+
+> **Note:** IP Anonymization must be configured directly in your Matomo server settings (Settings > Privacy > Anonymize data).
 
 ### E-Commerce Tracking
 
@@ -106,7 +107,7 @@ Full documentation available at:
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+Proprietary License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 

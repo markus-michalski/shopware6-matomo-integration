@@ -193,6 +193,61 @@ final class EcommerceTrackerTest extends TestCase
     }
 
     #[Test]
+    public function itEscapesXssInProductName(): void
+    {
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackProductViews: true,
+        ));
+
+        $product = $this->createProduct('SW10001', 'Test</script><script>alert(1)</script>', 29.99);
+
+        $result = $this->tracker->trackProductView($product, null, null);
+
+        self::assertStringNotContainsString('</script>', $result);
+        self::assertStringNotContainsString('<script>', $result);
+        self::assertStringContainsString('\u003C', $result);
+    }
+
+    #[Test]
+    public function itEscapesXssInCartItemLabel(): void
+    {
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackCartUpdates: true,
+        ));
+
+        $cart = $this->createCart([
+            ['sku' => 'SW10001', 'name' => '"><img src=x onerror=alert(1)>', 'price' => 19.99, 'qty' => 1],
+        ]);
+
+        $result = $this->tracker->trackCartUpdate($cart, null);
+
+        // HTML tags must be escaped via JSON_HEX_TAG
+        self::assertStringNotContainsString('<img', $result);
+        self::assertStringNotContainsString('>"', $result);
+        self::assertStringContainsString('\u003C', $result);
+    }
+
+    #[Test]
+    public function itEscapesXssInOrderLineItemLabel(): void
+    {
+        $this->mockConfigFromArray($this->createConfigArray(
+            ecommerceEnabled: true,
+            trackOrders: true,
+        ));
+
+        $order = $this->createOrderWithLineItems('ORD-XSS', [
+            ['sku' => 'SW10001', 'name' => '</script><script>alert(document.cookie)</script>', 'price' => 19.99, 'qty' => 1],
+        ]);
+
+        $result = $this->tracker->trackOrder($order, null);
+
+        self::assertStringNotContainsString('</script>', $result);
+        self::assertStringNotContainsString('<script>alert', $result);
+    }
+
+    #[Test]
     public function itTracksAddToCart(): void
     {
         $this->mockConfigFromArray($this->createConfigArray(
@@ -239,7 +294,6 @@ final class EcommerceTrackerTest extends TestCase
             'siteId' => 1,
             'trackingEnabled' => true,
             'cookielessTracking' => true,
-            'ipAnonymizationLevel' => 2,
             'respectDoNotTrack' => true,
             'requireConsent' => false,
             'useKlaroConsent' => false,
@@ -248,7 +302,6 @@ final class EcommerceTrackerTest extends TestCase
             'trackProductViews' => $trackProductViews,
             'trackCartUpdates' => $trackCartUpdates,
             'trackOrders' => $trackOrders,
-            'trackAdminUsers' => false,
             'enableHeartbeatTimer' => false,
             'heartbeatInterval' => 15,
             'trackLinks' => true,
