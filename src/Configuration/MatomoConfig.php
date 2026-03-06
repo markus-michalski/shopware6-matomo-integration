@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -26,7 +26,6 @@ final class MatomoConfig
         private readonly int $siteId,
         private readonly bool $trackingEnabled,
         private readonly bool $cookielessTracking,
-        private readonly int $ipAnonymizationLevel,
         private readonly bool $respectDoNotTrack,
         private readonly bool $requireConsent,
         private readonly bool $useKlaroConsent,
@@ -35,7 +34,6 @@ final class MatomoConfig
         private readonly bool $trackProductViews,
         private readonly bool $trackCartUpdates,
         private readonly bool $trackOrders,
-        private readonly bool $trackAdminUsers,
         private readonly bool $enableHeartbeatTimer,
         private readonly int $heartbeatInterval,
         private readonly bool $trackLinks,
@@ -87,11 +85,6 @@ final class MatomoConfig
         return $this->cookielessTracking;
     }
 
-    public function getIpAnonymizationLevel(): int
-    {
-        return $this->ipAnonymizationLevel;
-    }
-
     public function shouldRespectDoNotTrack(): bool
     {
         return $this->respectDoNotTrack;
@@ -112,10 +105,14 @@ final class MatomoConfig
 
     /**
      * Get the Klaro service name for this tracking service
+     *
+     * SECURITY: Sanitized to alphanumeric + hyphens only to prevent XSS
      */
     public function getKlaroServiceName(): string
     {
-        return $this->klaroServiceName;
+        $sanitized = preg_replace('/[^a-zA-Z0-9\-]/', '', $this->klaroServiceName);
+
+        return $sanitized !== '' && $sanitized !== null ? $sanitized : 'matomo';
     }
 
     public function isEcommerceEnabled(): bool
@@ -136,11 +133,6 @@ final class MatomoConfig
     public function shouldTrackOrders(): bool
     {
         return $this->trackOrders;
-    }
-
-    public function shouldTrackAdminUsers(): bool
-    {
-        return $this->trackAdminUsers;
     }
 
     public function isHeartbeatEnabled(): bool

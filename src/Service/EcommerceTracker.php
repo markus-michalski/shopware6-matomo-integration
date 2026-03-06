@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -223,11 +223,16 @@ final class EcommerceTracker
     }
 
     /**
-     * Safely JSON encode a value
+     * Safely JSON encode a value for use inside <script> tags
+     *
+     * SECURITY: Must use JSON_HEX_* flags to prevent XSS via </script> injection
      */
     private function jsonEncode(mixed $value): string
     {
-        $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $encoded = json_encode(
+            $value,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+        );
 
         return $encoded !== false ? $encoded : '""';
     }

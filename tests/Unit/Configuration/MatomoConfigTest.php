@@ -68,7 +68,6 @@ final class MatomoConfigTest extends TestCase
             siteId: $siteId,
             trackingEnabled: $trackingEnabled,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -77,7 +76,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,
@@ -112,7 +110,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: true,
             useKlaroConsent: false,
@@ -121,7 +118,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,
@@ -129,7 +125,6 @@ final class MatomoConfigTest extends TestCase
         );
 
         self::assertTrue($config->isCookielessTracking());
-        self::assertSame(2, $config->getIpAnonymizationLevel());
         self::assertTrue($config->shouldRespectDoNotTrack());
         self::assertTrue($config->requiresConsent());
     }
@@ -161,7 +156,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -170,7 +164,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: false,
             trackCartUpdates: false,
             trackOrders: false,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,
@@ -188,7 +181,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -197,7 +189,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,
@@ -208,6 +199,62 @@ final class MatomoConfigTest extends TestCase
     }
 
     #[Test]
+    public function itSanitizesXssInKlaroServiceName(): void
+    {
+        $config = new MatomoConfig(
+            matomoUrl: 'https://analytics.example.com',
+            siteId: 1,
+            trackingEnabled: true,
+            cookielessTracking: true,
+            respectDoNotTrack: true,
+            requireConsent: false,
+            useKlaroConsent: true,
+            klaroServiceName: '"><img src=x onerror=alert(1)>',
+            ecommerceEnabled: true,
+            trackProductViews: true,
+            trackCartUpdates: true,
+            trackOrders: true,
+            enableHeartbeatTimer: false,
+            heartbeatInterval: 15,
+            trackLinks: true,
+            trackDownloads: true,
+        );
+
+        $name = $config->getKlaroServiceName();
+
+        self::assertStringNotContainsString('<', $name);
+        self::assertStringNotContainsString('>', $name);
+        self::assertStringNotContainsString('"', $name);
+        self::assertStringNotContainsString('=', $name);
+        self::assertMatchesRegularExpression('/^[a-zA-Z0-9\-]+$/', $name);
+    }
+
+    #[Test]
+    public function itFallsBackToMatomoForEmptyKlaroServiceName(): void
+    {
+        $config = new MatomoConfig(
+            matomoUrl: 'https://analytics.example.com',
+            siteId: 1,
+            trackingEnabled: true,
+            cookielessTracking: true,
+            respectDoNotTrack: true,
+            requireConsent: false,
+            useKlaroConsent: true,
+            klaroServiceName: '!@#$%',
+            ecommerceEnabled: true,
+            trackProductViews: true,
+            trackCartUpdates: true,
+            trackOrders: true,
+            enableHeartbeatTimer: false,
+            heartbeatInterval: 15,
+            trackLinks: true,
+            trackDownloads: true,
+        );
+
+        self::assertSame('matomo', $config->getKlaroServiceName());
+    }
+
+    #[Test]
     public function itReturnsCorrectAdvancedSettings(): void
     {
         $config = new MatomoConfig(
@@ -215,7 +262,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -224,14 +270,12 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: true,
             enableHeartbeatTimer: true,
             heartbeatInterval: 30,
             trackLinks: false,
             trackDownloads: false,
         );
 
-        self::assertTrue($config->shouldTrackAdminUsers());
         self::assertTrue($config->isHeartbeatEnabled());
         self::assertSame(30, $config->getHeartbeatInterval());
         self::assertFalse($config->shouldTrackLinks());
@@ -245,7 +289,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -254,7 +297,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,
@@ -269,7 +311,6 @@ final class MatomoConfigTest extends TestCase
             siteId: 1,
             trackingEnabled: true,
             cookielessTracking: true,
-            ipAnonymizationLevel: 2,
             respectDoNotTrack: true,
             requireConsent: false,
             useKlaroConsent: false,
@@ -278,7 +319,6 @@ final class MatomoConfigTest extends TestCase
             trackProductViews: true,
             trackCartUpdates: true,
             trackOrders: true,
-            trackAdminUsers: false,
             enableHeartbeatTimer: false,
             heartbeatInterval: 15,
             trackLinks: true,

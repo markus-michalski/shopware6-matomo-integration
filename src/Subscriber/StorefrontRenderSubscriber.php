@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -50,8 +50,12 @@ final class StorefrontRenderSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // When using Klaro, skip consent check here - Klaro handles it in the frontend
-        // For non-Klaro mode, check if tracking is allowed (DNT, consent, etc.)
+        // DESIGN DECISION: In Klaro mode, the full tracking code is rendered into the page
+        // with type="text/plain". Klaro blocks execution until consent is given client-side.
+        // The Matomo URL and Site ID are visible in the HTML source - this is acceptable because:
+        // 1. Users who manually change type="text/plain" to "text/javascript" only track themselves
+        // 2. Matomo URL/Site ID are not secrets (they're in every tracked page's network requests)
+        // 3. Server-side Klaro cookie checking would break Klaro's async consent workflow
         if (!$config->usesKlaroConsent() && !$this->consentChecker->isTrackingAllowed($salesChannelId)) {
             return;
         }

@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -51,6 +51,8 @@ final class MatomoExtension extends AbstractExtension
 
     /**
      * Render the raw Matomo tracking code (without script tags)
+     *
+     * SECURITY: Output is marked is_safe['html'] - all values MUST be properly escaped
      */
     public function renderTrackingCode(?string $salesChannelId = null): string
     {
@@ -67,6 +69,8 @@ final class MatomoExtension extends AbstractExtension
 
     /**
      * Render the Matomo opt-out iframe
+     *
+     * SECURITY: Output is marked is_safe['html'] - iframe src MUST be htmlspecialchars'd
      *
      * @param string|null $salesChannelId Sales channel ID
      * @param string $language Language code (de, en, etc.)

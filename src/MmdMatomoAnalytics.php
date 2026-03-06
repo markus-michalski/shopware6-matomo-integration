@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 

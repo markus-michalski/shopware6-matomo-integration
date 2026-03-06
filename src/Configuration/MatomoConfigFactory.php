@@ -5,7 +5,7 @@
  *
  * @package   Mmd\MatomoAnalytics
  * @author    Markus Michalski
- * @copyright 2024-2025 Markus Michalski
+ * @copyright 2024-2026 Markus Michalski
  * @license   Proprietary - see LICENSE file for details
  */
 
@@ -42,7 +42,6 @@ final class MatomoConfigFactory
             siteId: $this->getInt('siteId', $salesChannelId),
             trackingEnabled: $this->getBool('trackingEnabled', $salesChannelId),
             cookielessTracking: $this->getBool('cookielessTracking', $salesChannelId, true),
-            ipAnonymizationLevel: $this->getInt('ipAnonymizationLevel', $salesChannelId, 2),
             respectDoNotTrack: $this->getBool('respectDoNotTrack', $salesChannelId, true),
             requireConsent: $this->getBool('requireConsent', $salesChannelId),
             useKlaroConsent: $this->getBool('useKlaroConsent', $salesChannelId),
@@ -51,7 +50,6 @@ final class MatomoConfigFactory
             trackProductViews: $this->getBool('trackProductViews', $salesChannelId, true),
             trackCartUpdates: $this->getBool('trackCartUpdates', $salesChannelId, true),
             trackOrders: $this->getBool('trackOrders', $salesChannelId, true),
-            trackAdminUsers: $this->getBool('trackAdminUsers', $salesChannelId),
             enableHeartbeatTimer: $this->getBool('enableHeartbeatTimer', $salesChannelId),
             heartbeatInterval: $this->getInt('heartbeatInterval', $salesChannelId, 15),
             trackLinks: $this->getBool('trackLinks', $salesChannelId, true),
